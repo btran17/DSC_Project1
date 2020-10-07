@@ -1,0 +1,96 @@
+---
+title: 'DSC 2010 Project 1: Sports'
+author: "Brittney Tran"
+date: "08/28/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = TRUE)
+library("ggplot2")
+library("tidyverse")
+```
+
+# Nashville Predators Regular Seasons 2019-2020
+
+Player's Jersey Numbers
+```{r}
+j <- c(33, 42, 13, 26, 95, 9, 64, 23, 19,
+       92, 47, 10, 15, 28, 32, 8, 51)
+```
+Number of Points
+```{r}
+p <- c(28, 10, 35, 1, 42, 48, 30, 31, 34,
+       36, NULL, 15, 31, NULL, 6, 31, 14)
+```
+Average playing time on ice per game
+```{r}
+t <- c(972, 657, 991, 620, 1012, 1041, 1068, 758,
+       956, 1023, NULL, 859, 805, NULL, 584, 925, 697)
+```
+## Write a function which does the following: 
+1) Choose a random sample of number of goals/points/touchdowns/etc. scored from the 2019 season. The size of the random sample should be the number of offensive players in a typical game.
+2) Find the average number of goals/points/touchdowns/etc. from your random sample.
+```{r}
+score <- function(){
+  points <- sample(p, size = 12)
+  print(points)
+  mean(points)
+}
+score()
+```
+## Use the ggplot2 package to create the following plots:
+(1) Scatterplot of the number of goals/points/touchdowns/etc. scored with amount of playing time.
+```{r}
+x <- c(28, 10, 35, 1, 42, 48, 30, 31, 34,
+       36, 0, 15, 31, 0, 6, 31, 14)
+y <- c(972, 657, 991, 620, 1012, 1041, 1068, 758,
+       956, 1023, 0, 859, 805, 0, 584, 925, 697)
+qplot(x, y, main="Playing Time vs Points")
+```
+(2) Histogram of the amount of playing time. You may experiment with the bin width to produce the histogram which most accurately represents the distribution of playing time.
+```{r}
+qplot(y, bins = 6, binwidth = 80.5, main="Average Time on Ice Per Game (in seconds)")
+#      , color = I("white"))
+# hist(y, main="Playing Time (in seconds)")
+```
+## Write a brief summary of your project to include the following sections:
+## (1) Methods used – address how and where you found your data (be sure to include the sport and team you chose) as well as briefly describe the work you did in R
+
+The sport I chose was hockey with the team being the Nashville Predators. To find the data, I did a Google search and took the stats from the ESPN and NHL website for the 2019 regular season. In hockey, from my knowledge, almost all the players do play offense, but since some players specialize in defense, I chose to go with the NHL breakdown roster to exclude those listed under defense. In addition, I took, from each player, the number of points instead of goals. Goals were more individualized to the players total scores in a game; whereas, the points would provide a better understanding of how useful the player is since it combines both goals and assists. 
+With this, I made three objects for the jersey number (j), points (p), and time on ice per game in seconds (t). Some players had no information in regards to their points and time on ice, so I assigned their values to NULL, and later to 0 to graph them. Afterwards, I created a function, named score(), to get the average number of points players scored throughout the season. The random sample was assigned to the object, points, which took player points, a sample size of 12, and no replacement. Then the function mean(points) took the average of those values.  
+
+## (2) Results – provide your results from steps 2 and 3. You should include a short description with the results from each step.
+
+In step 2, the object points, in the body of the function score(), took the random sample size 12 and averaged the number of points. Those results were in the 20s with the lowest value being around 23 and highest around 30, after running it a couple of times. 
+For step 3, the scatterplot did not allow NULL values to be graphed, so I re-assigned the values for points and time to the objects x and y. I changed NULL to zero. From the new assignment, the scatterplot showed a positive relationship for time on ice per game and points scored, as shown below.  
+```{r}
+# Scatterplot with smoothed line
+qplot(x, y, geom= c("point", "smooth"))
+```
+The histogram showed the amount of time on ice per game. The graph seems to show curve downward and then curves upward. It does suggest to be skewed left.    
+
+## (3) Discussion – does the average number of goals/points/touchdowns/etc. scored by your random sample seem to accurately describe the average offensive player on your team? Does there appear to be a relationship between the number of goals/points/touchdowns/etc. scored with amount of playing time? You may include any other thoughts or observations based on your results.
+
+The average number of points scored by the random sample does seem to give an accurate description of the offensive players on the team. The mean when you include the two players with NULL values is approximately 23; comparatively, when you exclude those players, the average is then approximately 26. The random sample function provides an average in between those numbers, with some numbers being a little over 26. The numbers are typically are between 23 and 30.
+The relationship between number of points and the amount of playing time appears to be positive. The more time the player is on the ice, the more likely they are to have higher point values, according to the scatterplot. 
+The histogram was rather interesting. Initially, I tried to include NULL values in the graph, but did not feel like the graph was accurate. So I tested graphs against NULL values or replacing it with zero. In the first graph (Avg. Time on Ice), the histogram included NULL values and produced a graph that is skewed to the left. The second graph had the NULL values converted to zero. That graph shows a downward then upward curve, also suggesting to be skewed left as the mean is less than the median. When you compare the two histograms, the graph with NULL values does not have the same gaps as when you compare to the graph with the zero values.
+```{r}
+qplot(t, bins = 6, binwidth = 80.5, main="Avg. Time on Ice (in seconds)"
+     , color = I("white"))
+# hist(t, main="Playing Time (in seconds)")
+```
+```{r}
+qplot(y, bins = 6, binwidth = 80.5, main="Time on Ice Per Game (in seconds)"
+      , color = I("white"))
+# hist(y, main="Playing Time (in seconds)")
+```
+## (4) Bibliography/Works Cited – sources should be appropriately cited using a standard citation style (particular choice in citation style left up to you as the individual).
+
+“2019-20 Nashville Predators Skating Stats.” ESPN, ESPN Internet Ventures, www.espn.com/nhl/team/stats/_/name/nsh/season/2020/seasontype/2. 
+
+“Nashville Predators 2019 Roster.” Nashville Predators, NHL, www.nhl.com/predators/roster. 
+
+“Nashville Predators Stats: 2019-2020.” Nashville Predators, NHL, www.nhl.com/predators/stats. 
